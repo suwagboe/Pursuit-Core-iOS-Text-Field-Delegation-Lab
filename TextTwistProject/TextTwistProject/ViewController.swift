@@ -62,10 +62,25 @@ extension ViewController: UITextViewDelegate {
     
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // textField = UITextField
+        // string = the actually things typed in which is a string...
+        // cannot remove from the text field because it is only the location of string... it is not actually the string ..
+        // to remove the letters in the string you need to actually access the string..
         
-
+    
         // as soon as the person starts typing the letter should be removed
+       
+        //randomScrambledWord.text? == is nil by default need to unwrapp to put something in it but we need to unwrap it to protect it
         
+        if randomScrambledWord.text?.contains(Character(string)) ?? false {
+            // above is a bool because it says that if randomScrambledWord.text? = has to have the ? with it because it can be emtpy contains a string so if the actual word itself contains a string that I want to be characters then it is true otherwise it is false
+            
+            randomScrambledWord.text?.remove(at: (randomScrambledWord.text?.firstIndex(of: Character(string)))!)
+            // this removes from the randomScrambledWord the character at the first sign of said character..
+            
+        }
+        
+        /*
         guard let text = Textfield.text else{
             return false
         }
@@ -78,15 +93,17 @@ extension ViewController: UITextViewDelegate {
         print("shouldChangeCharactersIn")
         print(text)
         
+        */
         return true
+
         
     }
 
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        return true
         print("it works")
+
+        return true
         
     }
     // this is for the return button on the keyboard.
