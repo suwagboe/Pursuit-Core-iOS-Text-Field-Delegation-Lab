@@ -10,34 +10,44 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var mainLabel: UILabel!
     
     @IBOutlet weak var randomScrambledWord: UILabel!
     
     @IBOutlet weak var Textfield: UITextField!
     
     var theWord = Word.getRandomWord().scrambled
-    
-    var theWordArr: [Character] = []
-    // want the word to become an arr
-    
-    //var textfieldInput = Text
-    
-    var textfieldArr: [Character] = []
-    // want the letters inputed in the text field to be stored in this arr
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        makingWordArr()
-        randomScrambledWord.text = String(theWordArr)
-        print("\(theWordArr)")
+      
+      var theWordArr: [Character] = []
+      // want the word to become an arr
+      
+      //var textfieldInput = Text
+      
+      var textfieldArr: [Character] = []
+      // want the letters inputed in the text field to be stored in this arr
+      
+      override func viewDidLoad() {
+          super.viewDidLoad()
+          // Do any additional setup after loading the view.
+          makingWordArr()
+          randomScrambledWord.text = theWord
+          print("\(theWord)")
+          mainLabel.text = "The word you need to unscramble is displayed below. As you enter in the letters they will disappear"
+          // doesnt work
+        Textfield.delegate = self 
+          
+          
+      }
+  
+    @IBAction func resetButton(_ sender: UIButton) {
         
-        // doesnt work
-        //Textfield.delegate = self
+        if randomScrambledWord.text == Textfield.text {
         
-        
+        mainLabel.text = " please try to guess the word!!!!"
+        }
     }
     
+  
     func makingWordArr() {
         for char in theWord {
             theWordArr.append(char)
@@ -50,7 +60,7 @@ class ViewController: UIViewController {
 
 // MARK: EXTENSIONS
 
-extension ViewController: UITextViewDelegate {
+extension ViewController: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         print("textFieldShouldBeginEditing")
@@ -72,12 +82,18 @@ extension ViewController: UITextViewDelegate {
        
         //randomScrambledWord.text? == is nil by default need to unwrapp to put something in it but we need to unwrap it to protect it
         
-        if randomScrambledWord.text?.contains(Character(string)) ?? false {
+        if randomScrambledWord.text?.contains(string) ?? false {
             // above is a bool because it says that if randomScrambledWord.text? = has to have the ? with it because it can be emtpy contains a string so if the actual word itself contains a string that I want to be characters then it is true otherwise it is false
+          //  print(randomScrambledWord.text)
             
             randomScrambledWord.text?.remove(at: (randomScrambledWord.text?.firstIndex(of: Character(string)))!)
+            // only checking each input to access all the characters in the string
             // this removes from the randomScrambledWord the character at the first sign of said character..
             
+        } else if string == "" {
+            
+            
+            randomScrambledWord.text?.insert(textField.text?.last ?? "b", at: randomScrambledWord.text!.endIndex)
         }
         
         /*
@@ -101,11 +117,16 @@ extension ViewController: UITextViewDelegate {
 
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        mainLabel.text = "The word you need to unscramble is displayed below. As you enter in the letters they will disappear"
+        
         print("it works")
 
         return true
         
     }
+    
+    
     // this is for the return button on the keyboard.
     // check if the word is correct.
     
