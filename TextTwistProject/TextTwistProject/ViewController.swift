@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var Textfield: UITextField!
     
-    var theWord = Word.getRandomWord().scrambled
+    var theWord = Word.getRandomWord()
       
       var theWordArr: [Character] = []
       // want the word to become an arr
@@ -29,12 +29,12 @@ class ViewController: UIViewController {
       override func viewDidLoad() {
           super.viewDidLoad()
           // Do any additional setup after loading the view.
-          makingWordArr()
-          randomScrambledWord.text = theWord
+        
+        randomScrambledWord.text = theWord.scrambled
           print("\(theWord)")
           mainLabel.text = "The word you need to unscramble is displayed below. As you enter in the letters they will disappear"
           // doesnt work
-        Textfield.delegate = self 
+        Textfield.delegate = self
           
           
       }
@@ -47,16 +47,38 @@ class ViewController: UIViewController {
         }
     }
     
-  
-    func makingWordArr() {
-        for char in theWord {
-            theWordArr.append(char)
+    // checking if random word unscrammbled works..
+    func checkingAnswer() {
+        if randomScrambledWord.text == Textfield.text {
+            
+            print()
+            mainLabel.text = "You got it right!!!"
+            newWord()
         }
     }
     
-    
-    
+        func newWord() {
+            
+            let newWord = Word.getRandomWord().scrambled
+            randomScrambledWord.text = newWord
+        }
+        
 }
+    
+    
+    /*
+    var theWordTwo = getNewrandomwod(ViewController)
+    
+    func getNewrandomwod() -> String {
+        
+       // let theWord =
+
+        return Word.getRandomWord().scrambled
+    }
+  */
+
+    
+    
 
 // MARK: EXTENSIONS
 
@@ -91,9 +113,14 @@ extension ViewController: UITextFieldDelegate {
             // this removes from the randomScrambledWord the character at the first sign of said character..
             
         } else if string == "" {
-            
+            // if it is an empty letter(deleted item)
             
             randomScrambledWord.text?.insert(textField.text?.last ?? "b", at: randomScrambledWord.text!.endIndex)
+            // adds the last correct input to the index.
+            
+        } else {
+            return false
+            // this stops the incorrect input from being added to the display..
         }
         
         /*
@@ -114,14 +141,15 @@ extension ViewController: UITextFieldDelegate {
 
         
     }
-
-    
+     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        mainLabel.text = "The word you need to unscramble is displayed below. As you enter in the letters they will disappear"
+        textField.resignFirstResponder()
         
-        print("it works")
-
+        checkingAnswer()
+        
+            
+         // theWord
         return true
         
     }
